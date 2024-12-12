@@ -28,12 +28,18 @@ class SumSchema(ma.Schema):
     num2 = fields.Integer()
     result = fields.Integer()
 
+sum_schema = SumSchema()
 sums_schema = SumSchema(many=True)
 
 @app.route('/sum', methods=['GET'])
 def find_all():
     sums = db.session.execute(db.select(Sum)).scalars()
     return sums_schema.jsonify(sums), 200
+
+@app.route('/sum/<int:result>', methods=['GET'])
+def find_all(result):
+    sum = db.session.execute(db.select(Sum).where(Sum.result == result)).scalar()
+    return sum_schema.jsonify(sum), 200
 
 @app.route('/sum', methods = ['POST'])
 def sum():
