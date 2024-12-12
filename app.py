@@ -38,8 +38,10 @@ def find_all():
 
 @app.route('/sum/<int:result>', methods=['GET'])
 def find_by_result(result):
-    sum = db.session.execute(db.select(Sum).where(Sum.result == result)).scalar()
-    return sum_schema.jsonify(sum), 200
+    sums = db.session.execute(db.select(Sum).where(Sum.result == result)).scalars()
+    if not sums:
+        return jsonify({'error': 'No sums found with the specified result'}), 404
+    return sums_schema.jsonify(sums), 200
 
 @app.route('/sum', methods = ['POST'])
 def sum():
