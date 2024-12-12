@@ -22,6 +22,11 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+      
+      - name: Install libpq-dev
+        run: |
+            sudo apt-get update
+            sudo apt-get install -y libpq-dev
 
       - name: Install dependencies
         run: |
@@ -33,6 +38,7 @@ jobs:
           pytest
 
   deploy:
+    needs: build-and-test
     runs-on: ubuntu-latest
 
     steps:
@@ -43,6 +49,11 @@ jobs:
         uses: actions/setup-python@v2
         with:
             python-version: 3.12
+
+      - name: Install libpq-dev
+        run: |
+            sudo apt-get update
+            sudo apt-get install -y libpq-dev
 
       - name: Create virtual environment
         run: |
