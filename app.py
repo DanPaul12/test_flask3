@@ -9,17 +9,15 @@ ma = Marshmallow(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://example_sum_postgres_3qkn_user:nSkwUR0ygS2dEEWA09qgGV9jBApRe8To@dpg-ctd3aijqf0us73bk5080-a.oregon-postgres.render.com/example_sum_postgres_3qkn'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-class Base(DeclarativeBase):
-    pass
 
-db = SQLAlchemy(app, model_class=Base)
+db = SQLAlchemy(app)
 
-class Sum(Base):
+class Sum(db.Model):  # Use `db.Model` as the base class for SQLAlchemy models
     __tablename__ = "Sum"
-    id = Mapped[int] = mapped_column(primary_key=True)
-    num1 = Mapped[int] = mapped_column(db.Integer, nullable=False)
-    num2 = Mapped[int] = mapped_column(db.Integer, nullable=False)
-    result = Mapped[int] = mapped_column(db.Integer, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)  # Use `db.Column` to define columns
+    num1 = db.Column(db.Integer, nullable=False)
+    num2 = db.Column(db.Integer, nullable=False)
+    result = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return f'<Sum {self.id}: {self.num1} + {self.num2} = {self.result}>'
